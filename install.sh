@@ -167,9 +167,6 @@ print_sys_info() {
 }
 
 # 安装缺失的依赖
-# install_deps() {
-#
-# }
 
 set_swapfile() {
     local swapfile_size=$1
@@ -189,6 +186,75 @@ set_swapfile() {
     
     # 将交换文件添加到 fstab
     echo "${swapfile_path} none swap sw 0 0" | sudo tee -a /etc/fstab > /dev/null
+}
+
+install_deps() {
+# 根据操作系统类型安装缺失的依赖
+case "$os" in
+    1)  # Debian
+        if [ "$is_there_wget" -eq 0 ]; then
+            sudo apt-get install -y wget
+        fi
+        if [ "$is_there_bc" -eq 0 ]; then
+            sudo apt-get install -y bc
+        fi
+        if [ "$is_there_awk" -eq 0 ]; then
+            sudo apt-get install -y gawk
+        fi
+        if [ "$is_there_grep" -eq 0 ]; then
+            sudo apt-get install -y grep
+        fi
+        if [ "$is_there_nproc" -eq 0 ]; then
+            sudo apt-get install -y coreutils
+        fi
+        if [ "$is_there_fallocate" -eq 0 ]; then
+            sudo apt-get install -y util-linux
+        fi
+        ;;
+    2)  # Ubuntu
+        if [ "$is_there_wget" -eq 0 ]; then
+            sudo apt-get install -y wget
+        fi
+        if [ "$is_there_bc" -eq 0 ]; then
+            sudo apt-get install -y bc
+        fi
+        if [ "$is_there_awk" -eq 0 ]; then
+            sudo apt-get install -y gawk
+        fi
+        if [ "$is_there_grep" -eq 0 ]; then
+            sudo apt-get install -y grep
+        fi
+        if [ "$is_there_nproc" -eq 0 ]; then
+            sudo apt-get install -y coreutils
+        fi
+        if [ "$is_there_fallocate" -eq 0 ]; then
+            sudo apt-get install -y util-linux
+        fi
+        ;;
+    3)  # CentOS
+        if [ "$is_there_wget" -eq 0 ]; then
+            sudo yum install -y wget
+        fi
+        if [ "$is_there_bc" -eq 0 ]; then
+            sudo yum install -y bc
+        fi
+        if [ "$is_there_awk" -eq 0 ]; then
+            sudo yum install -y gawk
+        fi
+        if [ "$is_there_grep" -eq 0 ]; then
+            sudo yum install -y grep
+        fi
+        if [ "$is_there_nproc" -eq 0 ]; then
+            sudo yum install -y coreutils
+        fi
+        if [ "$is_there_fallocate" -eq 0 ]; then
+            sudo yum install -y util-linux
+        fi
+        ;;
+    *)  # 其他系统
+        echo "不支持的操作系统"
+        ;;
+esac
 }
 
 #END################################
